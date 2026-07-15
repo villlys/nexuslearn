@@ -27,9 +27,11 @@ function PanelProfesor({ usuario, onLogout, onActualizarUsuario }) {
     setCargando(true);
     setError('');
     try {
-      const token = localStorage.getItem('token'); // ← NUEVO
-      const respuesta = await fetch(`http://localhost:3000/api/actividades/profesor/${usuario.id}`, {
-        headers: { 'Authorization': `Bearer ${token}` }, // ← NUEVO
+      const token = localStorage.getItem('token'); 
+      ////////////////////////////////////////////////////////////////////////////////////7
+      // Llamada a la API para obtener las actividades del profesor con la url de VITE_API_URL
+      const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/actividades/profesor/${usuario.id}`, {
+        headers: { 'Authorization': `Bearer ${token}` }, 
       });
       const datos = await respuesta.json();
       if (!respuesta.ok) {
@@ -57,7 +59,9 @@ function PanelProfesor({ usuario, onLogout, onActualizarUsuario }) {
 
     try {
       const token = localStorage.getItem('token'); // ← NUEVO
-      const respuesta = await fetch('http://localhost:3000/api/actividades', {
+      /////////////////////////////////////////////////////////////////////////////////////////////
+      // Llamada a la API para crear una nueva actividad con la url de VITE_API_URL
+      const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/actividades`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

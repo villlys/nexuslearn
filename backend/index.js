@@ -40,17 +40,20 @@ app.get('/', (req, res) => {
 });
 
 
-// Rutas de actividades 
-const actividadesRoutes = require('./routes/actividades');//importa las rutas de actividades
+// Rutas de actividades
+const actividadesRoutes = require('./routes/actividades'); //importa las rutas de actividades
 
-app.use('/api/actividades', actividadesRoutes);//usa esas rutas para cualquier URL que empiece
+app.use('/api/actividades', actividadesRoutes); //usa esas rutas para cualquier URL que empiece
 //  con /api/actividades7
 
 // Rutas de preguntas
-const preguntasRoutes = require('./routes/preguntas');//importa las rutas de preguntas
-app.use('/api/preguntas', preguntasRoutes);//usa esas rutas para cualquier URL que empiece 
+const preguntasRoutes = require('./routes/preguntas'); //importa las rutas de preguntas
+app.use('/api/preguntas', preguntasRoutes); //usa esas rutas para cualquier URL que empiece 
 // con /api/preguntas
 
+// Rutas de IA (Entrenador IA con Gemini)
+const iaRoutes = require('./routes/ia');
+app.use('/api/ia', iaRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
@@ -58,5 +61,3 @@ app.listen(PORT, () => {
     // esto le dice al servidor en qué puerto escuchar, usa .env si existe
     // si no, revisa en CMD que arrancó bien
 });
-
-

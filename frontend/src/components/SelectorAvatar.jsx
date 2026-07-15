@@ -34,9 +34,12 @@ function SelectorAvatar({ usuario, onAvatarActualizado }) {
     setGuardando(true);
     setMensaje('');
 
+    /////////////////////////////////////////////////////////////////////////////77
+    // Llamada a la API para actualizar el avatar del usuario con la url de VITE_API_URL
+
     try {
       const token = localStorage.getItem('token');
-      const respuesta = await fetch(`http://localhost:3000/api/usuarios/${usuario.id}/avatar`, {
+      const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/${usuario.id}/avatar`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

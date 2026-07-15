@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-const TIEMPO_LIMITE = 20; // segundos por pregunta
+const TIEMPO_LIMITE = 25; // segundos por pregunta
 
 function Quiz({ usuario, codigoActividad, onSalir, onActualizarUsuario }) {
   const [actividad, setActividad] = useState(null);
@@ -25,7 +25,9 @@ function Quiz({ usuario, codigoActividad, onSalir, onActualizarUsuario }) {
   useEffect(() => {
     const cargarActividad = async () => {
       try {
-        const respuesta = await fetch(`http://localhost:3000/api/actividades/${codigoActividad}`);
+        ////////////////////////////////////////////////////////////////////
+        // Llamada a la API para obtener la actividad con la url de VITE_API_URL
+        const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/actividades/${codigoActividad}`);
         const datos = await respuesta.json();
 
         if (!respuesta.ok) {
@@ -78,8 +80,10 @@ function Quiz({ usuario, codigoActividad, onSalir, onActualizarUsuario }) {
     const pregunta = actividad.preguntas[preguntaActual];
 
     try {
+      //////////////////////////////////////////////////////////////////////////
+      // Llamada a la API para enviar la respuesta del alumno con la url de VITE_API_URL
       const token = localStorage.getItem('token');
-const respuesta = await fetch(`http://localhost:3000/api/preguntas/${pregunta.id}/responder`, {
+const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/preguntas/${pregunta.id}/responder`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import DashboardAlumno from './components/DashboardAlumno';
 import PanelProfesor from './components/PanelProfesor';
+import Registro from './components/Registro';
 import { tokenExpirado, limpiarSesion } from './utils/auth';
 
 function App() {
@@ -11,11 +12,13 @@ function App() {
   const [error, setError] = useState('');
   const [sesionExpirada, setSesionExpirada] = useState(false);
 
+  // Controla si mostramos el login o la pantalla de registro
+  const [mostrarRegistro, setMostrarRegistro] = useState(false);
+
   const [usuarioLogueado, setUsuarioLogueado] = useState(() => {
     const token = localStorage.getItem('token');
     const guardado = localStorage.getItem('usuario');
 
-    // Si no hay token o ya expiró, no restauramos la sesión
     if (!token || tokenExpirado(token)) {
       limpiarSesion();
       return null;
@@ -24,7 +27,6 @@ function App() {
     return guardado ? JSON.parse(guardado) : null;
   });
 
-  // Revisa periódicamente si el token expiró mientras la app está abierta
   useEffect(() => {
     if (!usuarioLogueado) return;
 
@@ -35,7 +37,7 @@ function App() {
         setUsuarioLogueado(null);
         setSesionExpirada(true);
       }
-    }, 60 * 1000); // revisa cada minuto
+    }, 60 * 1000);
 
     return () => clearInterval(intervalo);
   }, [usuarioLogueado]);
@@ -47,7 +49,9 @@ function App() {
     setCargando(true);
 
     try {
-      const respuesta = await fetch('http://localhost:3000/api/usuarios/login', {
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////
+      // Llamada a la API para iniciar sesión con la url de VITE_API_URL
+      const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/usuarios/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -98,13 +102,23 @@ function App() {
     );
   }
 
+  // Si el usuario eligió registrarse, mostramos la pantalla de Registro
+  if (mostrarRegistro) {
+    return (
+      <Registro
+        onRegistroExitoso={() => setMostrarRegistro(false)}
+        onVolverALogin={() => setMostrarRegistro(false)}
+      />
+    );
+  }
+
   // Si no hay usuario logueado, mostramos el formulario de login
   return (
     <div className="min-h-screen w-full relative overflow-hidden flex items-center justify-center bg-[#0a0e27]" style={{ fontFamily: 'Outfit, sans-serif' }}>
 
-      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 rounded-full bg-purple-600 opacity-30 blur-3xl"></div>
-      <div className="absolute bottom-[-10%] right-[-5%] w-[28rem] h-[28rem] rounded-full bg-blue-500 opacity-30 blur-3xl"></div>
-      <div className="absolute top-[30%] right-[10%] w-72 h-72 rounded-full bg-pink-500 opacity-20 blur-3xl"></div>
+      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 rounded-full bg-purple-600 opacity-30 blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-5%] w-[28rem] h-[28rem] rounded-full bg-blue-500 opacity-30 blur-3xl pointer-events-none"></div>
+      <div className="absolute top-[30%] right-[10%] w-72 h-72 rounded-full bg-pink-500 opacity-20 blur-3xl pointer-events-none"></div>
 
       <div className="relative z-10 w-full max-w-md mx-4">
         <div className="backdrop-blur-xl bg-black/30 border border-white/20 rounded-3xl p-8 shadow-2xl">
@@ -173,7 +187,13 @@ function App() {
           </form>
 
           <p className="text-center text-white/50 text-sm mt-6">
-            ¿No tienes cuenta? <span className="text-purple-300 font-medium cursor-pointer hover:underline">Regístrate</span>
+            ¿No tienes cuenta?{' '}
+            <span
+              onClick={() => setMostrarRegistro(true)}
+              className="text-purple-300 font-medium cursor-pointer hover:underline"
+            >
+              Regístrate
+            </span>
           </p>
 
         </div>

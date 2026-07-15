@@ -62,12 +62,13 @@ function DetalleActividad({ actividad, onVolver }) {
     setCargando(true);
     setError('');
     try {
-      const token = localStorage.getItem('token'); // ← NUEVO
-      const headers = { 'Authorization': `Bearer ${token}` }; // ← NUEVO
-
+      const token = localStorage.getItem('token'); // 
+      const headers = { 'Authorization': `Bearer ${token}` }; // 
+////////////////////////////////////////////////////////////////////////////////////////7
+// Llamada a la API para obtener preguntas e historial de la actividad con la url de VITE_API_URL
       const [resPreguntas, resHistorial] = await Promise.all([
-        fetch(`http://localhost:3000/api/preguntas/actividad/${actividad.id}`, { headers }), // ← headers agregado
-        fetch(`http://localhost:3000/api/preguntas/historial/${actividad.id}`, { headers }), // ← headers agregado
+        fetch(`${import.meta.env.VITE_API_URL}/api/preguntas/actividad/${actividad.id}`, { headers }), // ← headers agregado
+        fetch(`${import.meta.env.VITE_API_URL}/api/preguntas/historial/${actividad.id}`, { headers }), // ← headers agregado
       ]);
       const dataPreguntas = await resPreguntas.json();
       const dataHistorial = await resHistorial.json();
@@ -98,8 +99,10 @@ function DetalleActividad({ actividad, onVolver }) {
     if (!enunciado.trim() || !retroalimentacion.trim()) { setErrorForm('El enunciado y la retroalimentación son obligatorios'); return; }
     setGuardando(true);
     try {
-      const token = localStorage.getItem('token'); // ← NUEVO
-      const respuesta = await fetch('http://localhost:3000/api/preguntas', {
+      const token = localStorage.getItem('token'); // 
+      ////////////////////////////////////////////////////////////////////////////777
+      // Llamada a la API para agregar una nueva pregunta con la url de VITE_API_URL
+      const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/preguntas`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,8 +122,10 @@ function DetalleActividad({ actividad, onVolver }) {
   const handleEliminarPregunta = async (preguntaId, enunciadoPregunta) => {
     if (!window.confirm(`¿Eliminar la pregunta "${enunciadoPregunta}"?`)) return;
     try {
-      const token = localStorage.getItem('token'); // ← NUEVO
-      const respuesta = await fetch(`http://localhost:3000/api/preguntas/${preguntaId}`, {
+      const token = localStorage.getItem('token'); // 
+      ///////////////////////////////////////////////////////////////////
+      // Llamada a la API para eliminar una pregunta con la url de VITE_API_URL
+      const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/preguntas/${preguntaId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }, // ← NUEVO
       });
