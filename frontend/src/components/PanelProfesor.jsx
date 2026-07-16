@@ -282,7 +282,7 @@ function PanelProfesor({ usuario, onLogout, onActualizarUsuario }) {
                     {actividades.map((actividad) => (
                       <div
                         key={actividad.id}
-                        className="bg-white/[0.04] border border-white/10 rounded-2xl p-4 flex items-center justify-between hover:bg-white/[0.08] transition-all"
+                        className="bg-white/[0.04] border border-white/10 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-white/[0.08] transition-all"
                       >
                         <div className="flex-1 min-w-0">
                           <p className="text-white font-semibold text-sm">{actividad.titulo}</p>
@@ -297,7 +297,7 @@ function PanelProfesor({ usuario, onLogout, onActualizarUsuario }) {
                         </div>
                         <button
                           onClick={() => setActividadSeleccionada(actividad)}
-                          className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-all flex-shrink-0 ml-3"
+                          className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-all flex-shrink-0 w-full sm:w-auto sm:ml-3"
                         >
                           Ver detalle
                         </button>

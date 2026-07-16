@@ -402,7 +402,7 @@ function DashboardAlumno({ usuario, onLogout, onActualizarUsuario }) {
                     </h2>
                   </div>
 
-                  <div className="flex gap-2 mb-3">
+                  <div className="flex flex-col sm:flex-row gap-2 mb-3">
                     <input
                       type="text"
                       value={codigoActividad}
