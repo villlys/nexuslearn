@@ -96,6 +96,30 @@ function PanelProfesor({ usuario, onLogout, onActualizarUsuario }) {
     }
   };
 
+  const handleEliminarActividad = async (id, titulo) => {
+    if (!window.confirm(`¿Eliminar "${titulo}"? Esto borrará también todas sus preguntas y el historial de respuestas de tus alumnos. Esta acción no se puede deshacer.`)) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const respuesta = await fetch(`${import.meta.env.VITE_API_URL}/api/actividades/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+
+      if (!respuesta.ok) {
+        const datos = await respuesta.json();
+        setError(datos.error || 'No se pudo eliminar la actividad');
+        return;
+      }
+
+      setMensajeExito('Actividad eliminada correctamente');
+      cargarActividades();
+
+    } catch (err) {
+      setError('No se pudo conectar con el servidor');
+    }
+  };
+
   if (actividadSeleccionada) {
     return (
       <DetalleActividad
@@ -295,12 +319,21 @@ function PanelProfesor({ usuario, onLogout, onActualizarUsuario }) {
                             </span>
                           </div>
                         </div>
-                        <button
-                          onClick={() => setActividadSeleccionada(actividad)}
-                          className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-all flex-shrink-0 w-full sm:w-auto sm:ml-3"
-                        >
-                          Ver detalle
-                        </button>
+                        <div className="flex gap-2 w-full sm:w-auto">
+                          <button
+                            onClick={() => setActividadSeleccionada(actividad)}
+                            className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-all"
+                          >
+                            Ver detalle
+                          </button>
+                          <button
+                            onClick={() => handleEliminarActividad(actividad.id, actividad.titulo)}
+                            className="px-3 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-300 transition-all"
+                            title="Eliminar actividad"
+                          >
+                            <i className="ti ti-trash text-lg"></i>
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
